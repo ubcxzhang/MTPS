@@ -1,0 +1,15 @@
+Package: MTPS
+Type: Package
+Title: Multi-Task Prediction using Stacking Algorithms
+Version: 0.1.0
+Author: Li Xing, Peijie Xie, Mary Lesperance, Xuekui Zhang <UBC.X.Zhang@gmail.com>
+Maintainer: Li Xing <sfulxing@gmail.com>
+Description: Multi-Task Prediction using Stacking Algorithms. This package is implementation of methods proposed in paper Li Xing, Mary L Lesperance, Xuekui Zhang. (2019) Simultaneous prediction of multiple outcomes using revised stacking algorithms, Bioinformatics, btz531, DOI 10.1093/bioinformatics/btz531 .
+License: GPL (>= 2)
+URL: https://doi.org/10.1093/bioinformatics/btz531
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 3.5.0), glmnet, rpart, MASS, e1071, class
+VignetteBuilder: utils
+NeedsCompilation: no
+Packaged: 2019-10-02 23:32:54 UTC; xzhang
