@@ -23,7 +23,7 @@ rs.multiFit <- function(yhat, ymat, xmat=NULL,
     stop("length of family must be consistent with response")
   }
   if (sum(family %in% c("gaussian", "binomial")) != ny) {
-    stop("family must be gaussian or binomial pr their combination")
+    stop("family must be gaussian or binomial or their combination")
   }
 
   if (length(method) == 1) {
