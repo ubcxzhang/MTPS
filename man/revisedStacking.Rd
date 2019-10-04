@@ -50,14 +50,14 @@ x.test  <- xmat[!training.id, ]
 # Residual Stacking
 fit.rs <- MTPS(xmat = x.train, ymat = y.train,
   family = "gaussian",cv = FALSE, residual = TRUE,
-  method.step1 = glmnet1, method.step2 = rpart1)
+  method.step1 = rpart1, method.step2 = lm1)
 predict(fit.rs, x.test)
 
 # using different base learners for different outcomes
  fit.mixOut <- MTPS(xmat=x.train, ymat=y.train,
   family="gaussian",cv = FALSE, residual = TRUE,
-  method.step1 = c(glmnet.lasso,glmnet.lasso,glmnet.lasso,lm1,lm1),
-  method.step2 = c(rpart1,glmnet.lasso,glmnet.lasso,glmnet.lasso,glmnet.lasso))
+  method.step1 = c(rpart1,glmnet.ridge,rpart1,lm1,lm1),
+  method.step2 = c(rpart1,lm1,lm1,lm1, glmnet.ridge))
 predict(fit.mixOut, x.test)
 }
 

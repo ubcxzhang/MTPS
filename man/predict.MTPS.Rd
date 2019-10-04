@@ -31,6 +31,6 @@ x.test  <- xmat[!training.id, ]
 # Cross-Validation Residual Stacking
 fit.rs <- MTPS(xmat = x.train, ymat = y.train,
   family = "gaussian",cv = FALSE, residual = TRUE,
-  method.step1 = glmnet1, method.step2 = rpart1)
+  method.step1 = rpart1, method.step2 = lm1)
 pred.rs <- predict(fit.rs, x.test)
 }

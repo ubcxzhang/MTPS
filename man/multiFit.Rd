@@ -33,12 +33,12 @@ y.test  <- ymat[!training.id, ]
 x.train <- xmat[training.id, ]
 x.test  <- xmat[!training.id, ]
 fit <- multiFit(xmat = x.train, ymat = y.train,
-                method = glmnet1, family = "gaussian")
+                method = rpart1, family = "gaussian")
 predict(fit, x.test)
 
 # using different base learners for different outcomes
 fit.mixOut <- multiFit(xmat = x.train, ymat = y.train,
-                method = c(glmnet.lasso,glmnet.lasso,glmnet.lasso,lm1,lm1),
+                method = c(rpart1, rpart1, glmnet.ridge,lm1,lm1),
                 family = "gaussian")
 predict(fit.mixOut, x.test)
 }

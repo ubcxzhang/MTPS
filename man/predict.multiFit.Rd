@@ -29,6 +29,6 @@ y.test  <- ymat[!training.id, ]
 x.train <- xmat[training.id, ]
 x.test  <- xmat[!training.id, ]
 fit <- multiFit(xmat = x.train, ymat = y.train,
-                method = glmnet1, family = "gaussian")
+                method = rpart1, family = "gaussian")
 predict(fit, x.test)
 }

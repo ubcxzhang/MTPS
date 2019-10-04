@@ -41,8 +41,7 @@ Use cross-validation to evaluate model performance.
 }
 \examples{
 data("HIV")
-cv.MTPS(xmat=XX, ymat=YY, family="gaussian",
-                   method.step1=glmnet1,
-                   method.step2=rpart1)
+cv.MTPS(xmat=XX, ymat=YY, family="gaussian", nfolds=2,
+        method.step1=rpart1, method.step2=lm1)
 }
 
