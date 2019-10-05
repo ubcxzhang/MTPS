@@ -10,6 +10,7 @@ URL: https://doi.org/10.1093/bioinformatics/btz531
 Encoding: UTF-8
 LazyData: true
 Depends: R (>= 3.5.0), glmnet, rpart, MASS, e1071, class
-VignetteBuilder: utils
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
 NeedsCompilation: no
 Packaged: 2019-10-02 23:32:54 UTC; xzhang
