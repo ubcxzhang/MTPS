@@ -7,5 +7,6 @@ Li Xing, Mary L Lesperance, Xuekui Zhang, (2019) "Simultaneous prediction of mul
 Please cite this paper, if you used this R package in your research. Thanks!
 
 To install this R package, please use the following R code:
+
     library(devtools)
     install_github("ubcxzhang/MTPS")
