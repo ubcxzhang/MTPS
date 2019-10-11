@@ -4,9 +4,11 @@ author: "Li Xing, Mary L Lesperance, Xuekui Zhang"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %VignetteIndexEntry{MTPS}
-  %VignetteEngine{knitr::rmarkdown}
-  usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{MTPS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignettePackage{MTPS}
+  %\usepackage[utf8]{inputenc}
+
 ---
 
 
