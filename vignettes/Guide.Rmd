@@ -6,9 +6,7 @@ output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{MTPS}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignettePackage{MTPS}
-  %\usepackage[utf8]{inputenc}
-
+  %\VignetteEncoding{UTF-8}
 ---
 
 
