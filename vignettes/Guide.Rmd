@@ -85,10 +85,10 @@ each outcome.
 
 ```{r ctn-noss, echo = T, results = 'hide'}
 # no stacking
-fit.mult <- multiFit(xmat = x.train, ymat = y.train, method = glmnet1, family = "gaussian")
+fit.mult <- multiFit(xmat = x.train, ymat = y.train, method = glmnet.ridge, family = "gaussian")
 ```
 
-To set up the stacking algorithm, A list of algorithms for step one and step two need to be specified. For continuous outcome we need to specify ` r family = "gaussian`. We also use ` r cv` and ` r residual` argument to specify whether we want to use Cross-Validation Stacking (CVS) or Residual Stacking (RS) or their combination. The default value for ` r cv` is "FALSE" and for ` r residual` is "TRUE", referring to the residual stacking
+To set up the stacking algorithm, A list of algorithms for step one and step two need to be specified. For continuous outcome we need to specify ` r family = "gaussian"`. We also use ` r cv` and ` r residual` argument to specify whether we want to use Cross-Validation Stacking (CVS) or Residual Stacking (RS) or their combination. The default value for ` r cv` is "FALSE" and for ` r residual` is "TRUE", referring to the residual stacking
 algorithm. The following code fits models using Standard Stacking
 algorithm (SS), Cross-Validation Stacking (CVS), Residual Stacking (RS)
 and Cross-Validation Residual Stacking (CVRS) with ` r MTPS` function. 
@@ -101,22 +101,22 @@ are applied in the step two for each outcome.
 # Standard Stacking 
 fit.ss <- MTPS(xmat = x.train, ymat = y.train, family = "gaussian",
                             cv = FALSE, residual = FALSE,
-                            method.step1 = glmnet1,
+                            method.step1 = glmnet.ridge,
                             method.step2 = rpart1)
 # Cross-Validation Stacking 
 fit.cv <- MTPS(xmat = x.train, ymat = y.train, family = "gaussian",
                             cv = TRUE, residual = FALSE,
-                            method.step1 = glmnet1,
+                            method.step1 = glmnet.ridge,
                             method.step2 = rpart1)
 # Residual Stacking 
 fit.rs <- MTPS(xmat = x.train, ymat = y.train, family = "gaussian",
                             cv = FALSE, residual = TRUE,
-                            method.step1 = glmnet1,
+                            method.step1 = glmnet.ridge,
                             method.step2 = rpart1)
 # Cross-Validation Residual Stacking 
 fit.cvrs <- MTPS(xmat = x.train, ymat = y.train, family = "gaussian",
                             cv = TRUE, residual = TRUE,
-                            method.step1 = glmnet1,
+                            method.step1 = glmnet.ridge,
                             method.step2 = rpart1)
 ```
 
