@@ -4,9 +4,9 @@ author: "Li Xing, Mary L Lesperance, Xuekui Zhang"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
-  %VignetteIndexEntry{MTPS}
-  %VignetteEngine{knitr::rmarkdown}
-  usepackage[utf8]{inputenc}
+  %\VignetteIndexEntry{MTPS}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 
@@ -37,7 +37,7 @@ base learners and use those learners to fit models. This package can fit models 
 
 As with any package, you first need to load it with the following command
 
-```{r library, echo = T, results = 'hide', warning=FALSE,message=FALSE}
+```{r library, echo = T, results = 'hide', warning=FALSE, message=FALSE}
 library(MTPS)
 ```
 
@@ -85,10 +85,10 @@ each outcome.
 
 ```{r ctn-noss, echo = T, results = 'hide'}
 # no stacking
-fit.mult <- multiFit(xmat = x.train, ymat = y.train, method = glmnet1, family = "gaussian")
+fit.mult <- multiFit(xmat = x.train, ymat = y.train, method = glmnet.ridge, family = "gaussian")
 ```
 
-To set up the stacking algorithm, A list of algorithms for step one and step two need to be specified. For continuous outcome we need to specify ` r family = "gaussian`. We also use ` r cv` and ` r residual` argument to specify whether we want to use Cross-Validation Stacking (CVS) or Residual Stacking (RS) or their combination. The default value for ` r cv` is "FALSE" and for ` r residual` is "TRUE", referring to the residual stacking
+To set up the stacking algorithm, A list of algorithms for step one and step two need to be specified. For continuous outcome we need to specify ` r family = "gaussian"`. We also use ` r cv` and ` r residual` argument to specify whether we want to use Cross-Validation Stacking (CVS) or Residual Stacking (RS) or their combination. The default value for ` r cv` is "FALSE" and for ` r residual` is "TRUE", referring to the residual stacking
 algorithm. The following code fits models using Standard Stacking
 algorithm (SS), Cross-Validation Stacking (CVS), Residual Stacking (RS)
 and Cross-Validation Residual Stacking (CVRS) with ` r MTPS` function. 
@@ -97,32 +97,38 @@ In the example, generalized linear models with elastic net
 regularization are used to fit models in the step one and tree models
 are applied in the step two for each outcome.
 
-```{r ctn-train, echo = T, results = 'hide'}
+```{r ctn-train, echo = T, results = 'hide', eval=FALSE}
 # Standard Stacking 
 fit.ss <- MTPS(xmat = x.train, ymat = y.train, family = "gaussian",
                             cv = FALSE, residual = FALSE,
-                            method.step1 = glmnet1,
+                            method.step1 = glmnet.ridge,
                             method.step2 = rpart1)
 # Cross-Validation Stacking 
 fit.cv <- MTPS(xmat = x.train, ymat = y.train, family = "gaussian",
                             cv = TRUE, residual = FALSE,
-                            method.step1 = glmnet1,
+                            method.step1 = glmnet.ridge,
                             method.step2 = rpart1)
 # Residual Stacking 
 fit.rs <- MTPS(xmat = x.train, ymat = y.train, family = "gaussian",
                             cv = FALSE, residual = TRUE,
-                            method.step1 = glmnet1,
+                            method.step1 = glmnet.ridge,
                             method.step2 = rpart1)
 # Cross-Validation Residual Stacking 
 fit.cvrs <- MTPS(xmat = x.train, ymat = y.train, family = "gaussian",
                             cv = TRUE, residual = TRUE,
-                            method.step1 = glmnet1,
+                            method.step1 = glmnet.ridge,
                             method.step2 = rpart1)
+```
+
+[ATTENTION] For convenience reason we will load ploting data here, user should re-run all code snippets to produce all the results.
+
+```{r echo=F,eval=F}
+data("Internal")
 ```
 
 The ` r predict` function returns the predicted value for the outcome on the testing data.
 
-```{r ctn-predict, echo = T, results = 'hide'}
+```{r ctn-predict, echo = T, results = 'hide', eval=FALSE}
 # no stacking
 pred.mult <- predict(fit.mult, x.test)
 # Standard Stacking 
@@ -137,7 +143,7 @@ pred.cvrs <- predict(fit.cvrs, x.test)
 
 To visualize the above prediction, we plot the predicted value versus the actual outcomes of testing data for above algorithms.
 
-```{r ctn-outcome}
+```{r ctn-outcome, warning=FALSE, eval=FALSE}
 library(ggplot2)
 library(reshape2)
 n.test <- nrow(x.test)
@@ -169,6 +175,23 @@ ggplot(ctn.plot.data) +
   facet_grid(Y~method)
 ```
 
+```{r warning=FALSE, echo=FALSE}
+library(ggplot2)
+library(reshape2)
+ggplot(ctn.plot.data) +
+  geom_point(aes(x=predictVal, y=yVal, color=method), size = 0.5, alpha = 0.8) +
+  geom_abline(slope=1, alpha = 0.2) +
+  coord_fixed() +
+  ylab("Testing Data Outcome") + xlab("Predicted Outcome on Testing Data") +
+  scale_x_discrete(breaks = NULL) +
+  scale_y_discrete(breaks = NULL) +
+  theme_bw() +
+  theme(axis.text = element_blank(),
+        strip.placement = "outside",
+        strip.background = element_blank()) +
+  facet_grid(Y~method)
+```
+
 ## Revised Stacking Algorithm for Binary Outcome
 
 The MTPS package can fit models and make predictions when the
@@ -179,7 +202,7 @@ ratios to binary outcomes are 3TC = 3, ABC = 2, AZT = 3, D4T = 1.5, and
 DDI = 1.5. Then, using similar approach the data is split into
 training data and testing data.
 
-```{r bin-data, echo = T, results = 'hide'}
+```{r bin-data, echo = T, results = 'hide', eval=FALSE}
 # https://hivdb.stanford.edu/pages/published_analysis/genophenoPNAS2006/CUTOFFS/drug.cutoffs
 # cutoff value to be used to define drug resistent
 cutoffs <- c(2,3,3,1.5,1.5) 
@@ -207,7 +230,7 @@ The following code fit models using the Residual Stacking algorithms
 with standardized Pearson residual. The step one uses tree method and
 step two uses linear regression method.
 
-```{r bin-train, echo = T, results = 'hide'}
+```{r bin-train, echo = T, results = 'hide', eval=FALSE}
 fit.prs.std <- MTPS(xmat = x.train.bin, ymat=y.train.bin,
                                family = "binomial",
                                cv = FALSE, residual = TRUE,
@@ -236,7 +259,7 @@ For illustration purpose, the first three columns of the outcome in the
 HIV data and last two columns of the binary outcome HIV data are
 combined for the mix outcome example.
 
-```{r mix-data, echo = T, results = 'hide'}
+```{r mix-data, echo = T, results = 'hide', eval=FALSE}
 ymat.mix <- cbind(ymat[,1:3], ymat.bin[,4:5])
 xmat.mix <- xmat
 y.train.mix <- ymat.mix[training.id, ]
@@ -250,7 +273,7 @@ outcomes, it is necessary to specify each outcome type in the ` r family` argume
 Residual Stacking algorithm. The first step uses LASSO and the second
 step uses tree method.
 
-```{r mix-training, echo = T, results = 'hide',warning=FALSE,message=FALSE}
+```{r mix-training, echo = T, results = 'hide', warning=FALSE, message=FALSE, eval=FALSE}
 fit.mix.rs <- MTPS(xmat = x.train.mix, ymat = y.train.mix,
                 family=c("gaussian","gaussian","gaussian","binomial","binomial"),
                 cv = FALSE, residual = TRUE,
@@ -261,7 +284,7 @@ pred.mix.rs <- predict(fit.mix.rs, x.test.mix)
 
 The following code draw the scatter plot of predicted value versus the actual outcomes on the first three columns of testing data, and the two confusion matrices for the last two columns of the testing data using 0.5 as the cutoff value. 
 
-```{r mix-outcome}
+```{r mix-outcome, eval=FALSE}
 n.test <- nrow(x.test)
 mix.plot.data <- cbind(rep(colnames(y.test.mix)[1:3], each=nrow(y.test.mix)),
                        rbind(cbind(pred.mix.rs[, 1], y.test.mix[, 1]),
@@ -284,7 +307,24 @@ ggplot(mix.plot.data) +
         strip.placement = "outside",
         strip.background = element_blank()) +
   facet_grid(~Y)
+```
+```{r echo=FALSE}
+ggplot(mix.plot.data) +
+  geom_point(aes(x=predict, y=outcome, color=Y), size = 0.5, alpha = 0.8) +
+  ylab("Outcome of Testing Data") + xlab("Predicted Outcome of Testing Data") +
+  scale_x_discrete(breaks = NULL) +
+  scale_y_discrete(breaks = NULL) +
+  geom_abline(slope=1, alpha = 0.2) +
+  coord_fixed() +
+  theme_bw() +
+  theme(legend.title = element_blank(),
+        axis.text = element_blank(),
+        strip.placement = "outside",
+        strip.background = element_blank()) +
+  facet_grid(~Y)
+```
 
+```{r echo=T, eval=T}
 for (yy in 4 : 5) {
   print(colnames(y.test.mix)[yy])
   print(table((pred.mix.rs[,yy] > 0.5) * 1, y.test.mix[,yy]))
@@ -305,7 +345,7 @@ methods. In the second step, the first outcome is fitted by the tree
 methods and the last four outcome is fitted by the LASSO model. By
 default the residual stacking algorithm is applied.
 
-```{r mix-mtd, echo = T, warning=FALSE,message=FALSE}
+```{r mix-mtd, echo = T, warning=FALSE,message=FALSE, eval=FALSE}
 fit.mixOut <- MTPS(xmat=x.train, ymat=y.train, family="gaussian",
                 method.step1 = 
                   c(glmnet.lasso,glmnet.lasso,glmnet.lasso,lm1,lm1),
@@ -331,7 +371,7 @@ that is, fix the value of alpha equals 1 or 0. (glmnet.lasso and
 glmnet.ridge method are available in the MTPS package) users
 can use the ` r modify.parameter` function to pass arguments.
 
-```{r method-mod, eval=F, echo=T}
+```{r method-mod, eval=F, echo=T,eval=FALSE}
 glmnet.lasso <- modify.parameter (glmnet1, alpha=1)
 glmnet.ridge <- modify.parameter (glmnet1, alpha=0)
 ```
@@ -349,7 +389,7 @@ which contains three elements called "model", "y.fitted" and "predFun". The "mod
 
 The following example shows how to define a method.
 
-```{r method-new, eval=F, echo=T}
+```{r method-new, eval=F, echo=T,eval=FALSE}
 glm1 <- function(xmat, ymat, family, ...) {
   tmp0 <- data.frame(yy=ymat, xmat)
   model <- glm(yy~., data=tmp0, family=family, ...)
@@ -381,7 +421,7 @@ The cross-validation process can be repeated to compare the these two
 methods. For speed reasons here we only repeat the above process for 20
 times and plot the boxplot of their MSE.
 
-```{r learner-compare, echo=T}
+```{r learner-compare, echo=T,eval=F}
 nsim <- 20
 mse.lasso.lm <- matrix(NA, nrow = nsim, ncol = ncol(ymat))
 mse.lasso.lm <- as.data.frame(mse.lasso.lm)
@@ -404,15 +444,31 @@ for (ii in 1:nsim) {
 mse.data <- data.frame(lasso=apply(mse.lasso.lm,1,mean),
                        ridge=apply(mse.ridge.lm,1,mean))
 mse.data <- melt(mse.data)
+
+```{r echo=F,eval=T}
+cat("No id variables; using all as measure variables")
+```
+```{r echo=T,eval=F}
 colnames(mse.data) <- c("Learner", "MSE")
 ggplot(mse.data) +
   geom_boxplot(aes(x=Learner, y=MSE, fill=Learner)) +
-  ggtitle("Boxplot of average Mean Square ErrorS") +
+  ggtitle("Boxplot of average Mean Square Error") +
   theme_bw() +
   theme(legend.position = "none",
         plot.title = element_text(hjust = 0.5),
         axis.title.x = element_blank())
 ```
+```{r echo=F,eval=T}
+# box plot
+ggplot(mse.data) +
+  geom_boxplot(aes(x=Learner, y=MSE, fill=Learner)) +
+  ggtitle("Boxplot of average Mean Square Error") +
+  theme_bw() +
+  theme(legend.position = "none",
+        plot.title = element_text(hjust = 0.5),
+        axis.title.x = element_blank())
+```
+
 
 Similarly, the above cross-validation process can be applied when the
 outcome is binary or a combination of continuous and binary outcomes.
