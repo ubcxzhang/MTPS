@@ -122,7 +122,7 @@ fit.cvrs <- MTPS(xmat = x.train, ymat = y.train, family = "gaussian",
 
 [ATTENTION] For convenience reason we will load ploting data here, user should re-run all code snippets to produce all the results.
 
-```{r echo=F,eval=F}
+```{r echo=F,eval=T}
 data("Internal")
 ```
 
@@ -143,17 +143,13 @@ pred.cvrs <- predict(fit.cvrs, x.test)
 
 To visualize the above prediction, we plot the predicted value versus the actual outcomes of testing data for above algorithms.
 
-```{r ctn-outcome, warning=FALSE, eval=FALSE}
+```{r ctn-outcome, eval=F}
 library(ggplot2)
 library(reshape2)
 n.test <- nrow(x.test)
-ctn.plot.data <- cbind(rep(c("No-Stacking", "SS", "CV", "RS", "CVRS"), each = n.test),
-                       rbind(pred.mult, pred.ss, pred.cv, pred.rs, pred.cvrs),
-                       y.test[rep(seq_len(n.test), 5), ])
-colnames(ctn.plot.data) <- c("method", 
-                             paste0(rep("pred.", ncol(y.test)), colnames(y.test)),
-                             colnames(y.test))
-ctn.plot.data <- as.data.frame(ctn.plot.data)
+ctn.plot.data_matrix <- cbind(rbind(pred.mult, pred.ss, pred.cv, pred.rs, pred.cvrs), y.test[rep(seq_len(n.test), 5), ])
+ctn.plot.data <-data.frame(rep(c("No-Stacking", "SS", "CV", "RS", "CVRS"), each = n.test),ctn.plot.data_matrix)
+colnames(ctn.plot.data) <- c("method", paste0(rep("pred.", ncol(y.test)), colnames(y.test)), colnames(y.test))
 dm1 <- melt(ctn.plot.data[,c("method","ABC","3TC","AZT","D4T", "DDI")], id=c("method"))
 dm2 <- melt(ctn.plot.data[,c("method","pred.ABC","pred.3TC","pred.AZT","pred.D4T", "pred.DDI")], id=c("method"))
 ctn.plot.data <- cbind(dm1, dm2[, -1])
@@ -174,6 +170,7 @@ ggplot(ctn.plot.data) +
         strip.background = element_blank()) +
   facet_grid(Y~method)
 ```
+
 
 ```{r warning=FALSE, echo=FALSE}
 library(ggplot2)
@@ -443,12 +440,8 @@ for (ii in 1:nsim) {
 # box plot
 mse.data <- data.frame(lasso=apply(mse.lasso.lm,1,mean),
                        ridge=apply(mse.ridge.lm,1,mean))
-mse.data <- melt(mse.data)
+mse.data <- melt(mse.data,measure.vars = c("lasso","ridge"))
 
-```{r echo=F,eval=T}
-cat("No id variables; using all as measure variables")
-```
-```{r echo=T,eval=F}
 colnames(mse.data) <- c("Learner", "MSE")
 ggplot(mse.data) +
   geom_boxplot(aes(x=Learner, y=MSE, fill=Learner)) +
