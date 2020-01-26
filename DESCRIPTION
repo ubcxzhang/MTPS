@@ -1,10 +1,14 @@
 Package: MTPS
 Type: Package
 Title: Multi-Task Prediction using Stacking Algorithms
-Version: 0.1.5
-Author: Li Xing, Peijie Xie, Mary Lesperance, Xuekui Zhang <UBC.X.Zhang@gmail.com>
-Maintainer: Li Xing <sfulxing@gmail.com>
-Description: This package provide a tool for simutanous prediction of multiple outcomes, which enables multiple prediction tasks to borrow strength from each other. This package is implementation of methods proposed in our paper: Li Xing, Mary L Lesperance, Xuekui Zhang. (2019)  Bioinformatics, <doi:10.1093/bioinformatics/btz531>.
+Version: 0.1.9
+Authors@R: c(
+    person("Li Xing", role=c("aut", "cre"), email="sfulxing@gmail.com"),
+    person("Peijie Xie", role = "ctb"), 
+    person("Mary Lesperance", role = "aut"),
+    person("Xuekui Zhang",role = c("aut"))
+    )
+Description: Simultaneous multiple outcomes prediction based on revised stacking algorithms, which enables the integration of information from predictions of individual models. An implementation of methodologies proposed in our paper: Li Xing, Mary L Lesperance, Xuekui Zhang. (2019)  Bioinformatics, "Simultaneous prediction of multiple outcomes using revised stacking algorithms" <doi:10.1093/bioinformatics/btz531>.
 License: GPL (>= 2)
 URL: https://doi.org/10.1093/bioinformatics/btz531
 Encoding: UTF-8
@@ -13,5 +17,6 @@ Depends: R (>= 3.5.0), glmnet, rpart, MASS, e1071, class
 Suggests: knitr, rmarkdown, ggplot2, reshape2
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2019-10-02 23:32:54 UTC; xzhang
+Packaged: 2019-12-21 17:17:20 UTC; ying
+Maintainer: Li Xing <sfulxing@gmail.com>
 RoxygenNote: 6.1.1
